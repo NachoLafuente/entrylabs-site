@@ -1,1 +1,0 @@
-const c=document.querySelector("[data-enricher]");if(c){const i=window.matchMedia("(prefers-reduced-motion: reduce)").matches,s=c.querySelectorAll(".line");if(i)s.forEach(e=>e.classList.add("visible"));else{let e=0;const t=()=>{e<s.length?(s[e].classList.add("visible"),e++):setTimeout(()=>{s.forEach(l=>l.classList.remove("visible")),e=0},2800)};t(),setInterval(t,700)}}
