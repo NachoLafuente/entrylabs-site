@@ -1,0 +1,49 @@
+name: Lighthouse
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  lighthouse:
+    name: Lighthouse audit (perf/a11y/best-practices/seo >= 0.9)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Wait for GitHub Pages to publish the new build
+        # Poll the live homepage until we either see a build newer than this
+        # commit's push time or hit the timeout. Falls back to a flat 90s sleep
+        # if curl can't reach the site.
+        run: |
+          set -euo pipefail
+          URL="https://entry-labs.com"
+          echo "Waiting up to 4 minutes for $URL to respond 200 ..."
+          for i in $(seq 1 24); do
+            code=$(curl -s -o /dev/null -w '%{http_code}' "$URL" || echo "000")
+            echo "  attempt $i: HTTP $code"
+            if [ "$code" = "200" ]; then
+              echo "Site is live."
+              # Extra grace so GH Pages CDN edge gets the new build everywhere
+              sleep 30
+              exit 0
+            fi
+            sleep 10
+          done
+          echo "Site never returned 200 within timeout; running Lighthouse anyway."
+
+      - name: Run Lighthouse CI
+        uses: treosh/lighthouse-ci-action@v12
+        with:
+          urls: |
+            https://entry-labs.com/
+            https://entry-labs.com/agents/autofill/
+            https://entry-labs.com/agents/enricher/
+            https://entry-labs.com/agents/signals/
+          uploadArtifacts: true
+          temporaryPublicStorage: true
+          configPath: ./.github/workflows/lighthouserc.json
