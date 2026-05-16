@@ -1,1 +1,0 @@
-import"./hoisted.DkpFxfRe.js";const e=document.querySelector("[data-signals]");if(e&&!window.matchMedia("(prefers-reduced-motion: reduce)").matches){const t=e.querySelectorAll(".srow");let s=0;const o=()=>{t.forEach(r=>r.classList.remove("lit")),t[s%t.length].classList.add("lit"),s++};o(),setInterval(o,900)}else e&&e.querySelector(".srow")?.classList.add("lit");
