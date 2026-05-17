@@ -41,9 +41,9 @@ jobs:
         with:
           urls: |
             https://entry-labs.com/
-            https://entry-labs.com/agents/autofill/
-            https://entry-labs.com/agents/enricher/
-            https://entry-labs.com/agents/signals/
+            https://entry-labs.com/#autofill
+            https://entry-labs.com/#enricher
+            https://entry-labs.com/#signals
           uploadArtifacts: true
           temporaryPublicStorage: true
           configPath: ./.github/workflows/lighthouserc.json
